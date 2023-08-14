@@ -1,4 +1,6 @@
-@import './normalise.scss';
-@import './variables.scss';
-@import './base.scss';
-@import './typography.scss';
+@import "./normalise.scss";
+
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
