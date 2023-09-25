@@ -6,10 +6,12 @@ import 'nprogress/nprogress.css'
 export default function ProgressBar() {
     const pathname = usePathname()
     const searchParams = useSearchParams()
+    NProgress.configure({ showSpinner: false })
+    
     useEffect(() => {
         NProgress.start()
     }, [])
-    
+
     useEffect(() => {
         NProgress.start()
     }, [pathname]);

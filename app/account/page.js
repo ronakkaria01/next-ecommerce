@@ -1,10 +1,20 @@
 import Header from "@/components/header/header";
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../api/auth/[...nextauth]/route'
+import LoginSignup from "@/components/content/account";
 
-export default function Account() {
+export default async function Account() {
+    const session = await getServerSession(authOptions)
     return (
         <>
             <Header />
-            Account
+            {session ? (
+                ""
+            ) : (
+                <>
+                    <LoginSignup />
+                </>
+            )}
         </>
     )
 }
