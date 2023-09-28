@@ -17,7 +17,7 @@ export default function Header() {
         <>
             <ProgressBar />
             <header className="bg-slate-100">
-                <nav className="flex justify-between items-center px-12 py-4">
+                <nav className="flex justify-between items-center py-4 container">
                     <div>
                         <NextLink href="/" text="Next E-commerce" />
                     </div>

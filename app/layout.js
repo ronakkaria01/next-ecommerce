@@ -1,7 +1,8 @@
 import './globals.scss'
 import { getServerSession } from 'next-auth'
-import Provider from '@/components/providers/SessionProvider'
+import Provider from '@/context/SessionProvider'
 import { authOptions } from './api/auth/[...nextauth]/route'
+import { CurrencyProvider } from '@/context/CurrencyContext'
 
 export const metadata = {
   title: 'Next Ecommerce',
@@ -14,7 +15,9 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body suppressHydrationWarning={true} className='text-slate-600'>
         <Provider session={session}>
-          {children}
+          <CurrencyProvider>
+            {children}
+          </CurrencyProvider>
         </Provider>
       </body>
     </html>
