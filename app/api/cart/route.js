@@ -2,41 +2,106 @@ import { products } from "@/app/shop/page";
 import { defaultResponse as response, sendResponse } from "@/utils/defaults";
 
 export async function POST(req, res) {
-    const carts = {}
-    const { product_id, quantity, user_id } = await req.json();
-    console.log(product_id)
 
-    if (!product_id || !quantity || isNaN(quantity) || quantity <= 0) {
-        response.status = 400
-        response.message = "Invalid request. Please provide a valid product_id and quantity."
-        response.errors = "Invalid request. Please provide a valid product_id and quantity."
-        return sendResponse(response)
+    let cart = [];
+    try {
+        if (req.cookies.has('cart')) {
+            cart = JSON.parse(req.cookies.get('cart').value)
+        }
+        const { product_id, quantity, user_id } = await req.json();
+        if (!product_id || !quantity || isNaN(quantity) || quantity <= 0) {
+            response.status = 400
+            response.message = "Invalid request. Please provide a valid product_id and quantity."
+            response.errors = "Invalid request. Please provide a valid product_id and quantity."
+            return cartResponse(response, cart)
+        }
+
+        const product = products.find((p) => p.product_id === product_id);
+
+        if (!product) {
+            response.status = 404
+            response.message = "Product not found"
+            response.errors = "Product not found"
+            return cartResponse(response, cart)
+        }
+
+        const cartHasProduct = cart.some(item => item.product_id === product_id)
+        if (cartHasProduct) {
+            const index = cart.findIndex(obj => obj.product_id === product_id)
+
+            if (index !== -1) {
+                cart[index].quantity += quantity
+            }
+        } else {
+            cart.push({
+                product_id,
+                quantity
+            })
+        }
+        response.message = "Product added to the cart successfully"
+        response.data = {
+            cart: cart
+        }
+    } catch (err) {
+        response.status = 500
+        response.message = "Invalid request. Some error occured, please try again later."
+        response.errors = "Invalid request. Some error occured, please try again later."
     }
 
-    const product = products.find((p) => p.product_id === product_id);
+    return cartResponse(response, cart)
+}
 
-    if (!product) {
-        response.status = 404
-        response.message = "Product not found"
-        response.errors = "Product not found"
-        return sendResponse(response)
+export async function DELETE(req, res) {
+    let cart = [];
+    try {
+        if (req.cookies.has('cart')) {
+            cart = JSON.parse(req.cookies.get('cart').value)
+        }
+        
+        const { product_id, user_id } = await req.json();
+        if (!product_id) {
+            response.status = 400
+            response.message = "Invalid request. Please provide a valid product_id."
+            response.errors = "Invalid request. Please provide a valid product_id."
+            return cartResponse(response, cart)
+        }
+
+        const product = products.find((p) => p.product_id === product_id);
+        if (!product) {
+            response.status = 404
+            response.message = "Product not found"
+            response.errors = "Product not found"
+            return cartResponse(response, cart)
+        }
+
+        const cartHasProduct = cart.some(item => item.product_id === product_id)
+        if (cartHasProduct) {
+            const index = cart.findIndex(obj => obj.product_id === product_id)
+
+            if (index !== -1) {
+                cart = cart.filter(item => {
+                    return item.product_id !== product_id
+                })
+            }
+            response.message = "Product removed from cart successfully"
+            response.data = {
+                cart: cart
+            }
+            return cartResponse(response, cart)
+        }
+    } catch (err) {
+        response.status = 500
+        response.message = "Invalid request. Some error occured, please try again later."
+        response.errors = "Invalid request. Some error occured, please try again later."
     }
+}
 
-    if (!carts[user_id]) {
-        carts[user_id] = {};
-    }
-
-    const cart = carts[user_id]
-
-    if (!cart[product_id]) {
-        cart[product_id] = { product, quantity };
-    } else {
-        cart[product_id].quantity += quantity;
-    }
-
-    response.message = "Product added to the cart successfully"
-    response.data = {
-        cart: cart[product_id]
-    }
-    return sendResponse(response)
+function cartResponse(response, cart) {
+    const resp = sendResponse(response)
+    resp.cookies.set({
+        name: "cart",
+        value: JSON.stringify(cart),
+        httpOnly: false
+    })
+    return resp
 }

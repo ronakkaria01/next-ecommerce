@@ -1,13 +1,14 @@
-"use client";
-import Header from "@/components/header/header";
+"use client"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import nProgress from "nprogress"
 
 export default function LoginSignup() {
     const router = useRouter()
 
     const login = async (e) => {
         e.preventDefault()
+        nProgress.start()
         const formData = new FormData(e.target)
         const email = formData.get('email')
         const password = formData.get('password')
@@ -15,6 +16,7 @@ export default function LoginSignup() {
 
         if (result.error) {
             // console.log(JSON.parse(result.error))
+            nProgress.done()
         } else {
             router.push('/')
         }
@@ -22,6 +24,7 @@ export default function LoginSignup() {
 
     const register = async (e) => {
         e.preventDefault()
+        nProgress.start()
         const formData = new FormData(e.target)
         const email = formData.get('email')
         const password = formData.get('password')
@@ -29,6 +32,7 @@ export default function LoginSignup() {
 
         if (result.error) {
             // console.log(JSON.parse(result.error))
+            nProgress.done()
         } else {
             router.push('/')
         }

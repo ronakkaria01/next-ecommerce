@@ -1,15 +1,16 @@
-"use client"
+import LogoutButton from "../button/Logout";
 import NextLink from "../helpers/nextlink";
 import ProgressBar from "../helpers/ProgressBar";
-import { useSession } from "next-auth/react"
-import { signOut } from "next-auth/react"
+import { authOptions } from '../../app/api/auth/[...nextauth]/route'
+import { getServerSession } from 'next-auth'
 
-export default function Header() {
-    const session = useSession()
+export default async function Header() {
+    const session = await getServerSession(authOptions)
 
     const navLinks = [
         ['Home', '/'],
         ['Shop', '/shop'],
+        ['Cart', '/cart'],
         ['Account', '/account']
     ];
 
@@ -28,10 +29,10 @@ export default function Header() {
                                     <NextLink href={url} className="rounded px-3 py-2 block hover:bg-slate-500 hover:text-white" activeClassName="bg-slate-500 text-white" text={title} />
                                 </li>
                             ))}
-                            {session.data ? (
+                            {session?.user ? (
                                 <>
                                     <li>
-                                        <button className="rounded px-3 py-2 block hover:bg-slate-500 hover:text-white" onClick={(e) => signOut()}>Logout</button>
+                                        <LogoutButton />
                                     </li>
                                 </>
                             ) : ""}
