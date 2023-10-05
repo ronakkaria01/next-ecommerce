@@ -2,23 +2,39 @@
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import nProgress from "nprogress"
+import { useState } from "react"
+import AuthValidationErrors from "../errors/authValidationErrors"
 
 export default function LoginSignup() {
     const router = useRouter()
+    const [loginMessages, setLoginMessages] = useState({})
 
     const login = async (e) => {
         e.preventDefault()
-        nProgress.start()
-        const formData = new FormData(e.target)
-        const email = formData.get('email')
-        const password = formData.get('password')
-        const result = await signIn('credentials', { email, password, redirect: false })
-
-        if (result.error) {
-            // console.log(JSON.parse(result.error))
+        try {
+            setLoginMessages({})
+            nProgress.start()
+            const formData = new FormData(e.target)
+            const email = formData.get('email')
+            const password = formData.get('password')
+            const result = await signIn('credentials', { email, password, redirect: false })
+            if (result.error) {
+                const { validationErrors, message } = JSON.parse(result.error)
+                setLoginMessages({
+                    message: message,
+                    validationErrors: validationErrors
+                })
+            } else {
+                router.refresh()
+                router.push('/')
+            }
+        } catch (err) {
+            setLoginMessages({
+                message: "Some error occured, please try again",
+                validationErrors: null
+            })
+        } finally {
             nProgress.done()
-        } else {
-            router.push('/')
         }
     }
 
@@ -31,7 +47,11 @@ export default function LoginSignup() {
         const result = await signIn('credentials', { email, password, redirect: false })
 
         if (result.error) {
-            // console.log(JSON.parse(result.error))
+            const { validationErrors, message } = JSON.parse(result.error)
+            setLoginMessages({
+                message: message,
+                validationErrors: validationErrors
+            })
             nProgress.done()
         } else {
             router.push('/')
@@ -54,6 +74,7 @@ export default function LoginSignup() {
                             <div>
                                 <button>Login</button>
                             </div>
+                            <AuthValidationErrors message={loginMessages.message} validationErrors={loginMessages.validationErrors} />
                         </form>
                     </div>
                     <div className="w-1/2">
