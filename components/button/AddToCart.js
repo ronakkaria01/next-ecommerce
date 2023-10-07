@@ -19,7 +19,6 @@ const AddToCart = ({ product_id }) => {
                     quantity: 1
                 })
             });
-            // console.log(await added.json())
             router.refresh()
         } catch (err) {
             console.log(err)

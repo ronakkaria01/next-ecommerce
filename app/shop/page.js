@@ -37,10 +37,6 @@ export default async function Shop() {
     } catch (err) {
         console.log(err)
     }
-    console.log(shop)
-    // shop.forEach(item => {
-    //     console.log(item.toJSON())
-    // });
     return (
         <>
             <Header />

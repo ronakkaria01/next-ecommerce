@@ -10,7 +10,6 @@ export default async function CreateProducts() {
 
     const create = async () => {
         if (!user_id) {
-            console.log("not logged in")
             return
         }
         products.map(async (product) => {
