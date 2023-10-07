@@ -8,8 +8,8 @@ import { development, production } from "../config/config";
 const basename = _basename(import.meta.url);
 const env = process.env.NODE_ENV || 'development';
 const config = env === 'production' ? production : development
-const db = {};
 const modelsDir = `${process.cwd()}/db/models/` || __dirname;
+const models = {}
 
 let sequelize;
 if (config.use_env_variable) {
@@ -23,28 +23,40 @@ if (config.use_env_variable) {
   );
 }
 
-readdirSync(modelsDir)
-  .filter(file => {
-    return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
-  })
-  .forEach(async file => {
+const importModels = async () => {
+  const files = readdirSync(modelsDir)
+    .filter(file => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js');
+
+  for (const file of files) {
     try {
       const modelModule = await import(`@/db/models/${file.slice(0, -3)}`);
       const modelDefiner = modelModule.default || modelModule;
       const model = modelDefiner(sequelize, DataTypes);
-      db[model.name] = model;
+      models[model.name] = model;
     } catch (error) {
       console.error('Error importing module:', error);
     }
-  });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
   }
+
+  Object.keys(models)
+    .forEach((modelName) => {
+      if (typeof models[modelName].associate === 'function') {
+        models[modelName].associate(models);
+      }
+    });
+};
+
+// Call the function to import models
+importModels().then(() => {
+  // sequelize.sync({ force: true }).then(() => {
+  //   // console.log("Drop and re-sync db.");
+  // }).catch((err) => {
+  //   console.log(err)
+  // });
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-export default db;
+export {
+  sequelize,
+  Sequelize,
+  models
+}

@@ -1,9 +1,10 @@
 export default (sequelize, DataTypes) => {
     const Users = sequelize.define("users", {
-        u_id: {
-            type: DataTypes.INTEGER,
+        id: {
+            type: DataTypes.BIGINT(20),
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
+            unsigned: true
         },
         first_name: {
             type: DataTypes.TEXT,

@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { validateData } from "@/utils/defaults"
 import { emailSchema, passwordSchema } from "@/utils/schemas"
 import bcrypt from "bcrypt"
-import db from '@/db/models/index'
+import { models } from '@/db/models/index'
 
 export const authOptions = {
     providers: [
@@ -29,14 +29,14 @@ export const authOptions = {
                         }
                     }
 
-                    const user = await db.users.findOne({
+                    const user = await models.users.findOne({
                         where: { email: credentials.email }
                     })
                     if (user) {
                         const passwordVerified = await bcrypt.compare(credentials.password, user.password)
                         if (passwordVerified) {
                             return {
-                                id: user.u_id,
+                                id: user.id,
                                 first_name: user.first_name,
                                 last_name: user.last_name,
                                 user_name: user.user_name,
@@ -50,21 +50,21 @@ export const authOptions = {
                         }
                     } else {
                         const hashedPassword = await bcrypt.hash(credentials.password, 10)
-                        const inserted = await db.users.create({
+                        const inserted = await models.users.create({
                             email: credentials.email,
                             password: hashedPassword
                         })
-                        const insertId = inserted.u_id
-                        const createdUser = await db.users.findOne({
+                        const insertId = inserted.id
+                        const createdUser = await models.users.findOne({
                             where: {
-                                u_id: insertId
+                                id: insertId
                             },
                             attributes: {
                                 exclude: ['password']
                             }
                         })
                         return {
-                            id: createdUser.u_id,
+                            id: createdUser.id,
                             first_name: createdUser.first_name,
                             last_name: createdUser.last_name,
                             user_name: createdUser.user_name,
