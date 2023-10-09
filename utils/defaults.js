@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 const { z } = require('zod')
 
+const appDefaults = {
+    enableRealTimeUserCheck: false
+}
+
 const defaultResponse = {
     status: 200,
     message: "",
@@ -31,5 +35,6 @@ function validateData(data, schema) {
 module.exports = {
     defaultResponse,
     sendResponse,
-    validateData
+    validateData,
+    appDefaults
 }

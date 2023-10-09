@@ -1,4 +1,4 @@
-import { cleanPosts, extract_meta_data } from "@/utils/functions"
+import { cleanPosts } from "@/utils/functions"
 import { models } from "../models"
 
 async function getShopProducts() {
