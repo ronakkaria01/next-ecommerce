@@ -35,13 +35,9 @@ export const authOptions = {
                     if (user) {
                         const passwordVerified = await bcrypt.compare(credentials.password, user.password)
                         if (passwordVerified) {
-                            return {
-                                id: user.id,
-                                first_name: user.first_name,
-                                last_name: user.last_name,
-                                user_name: user.user_name,
-                                email: user.email,
-                            }
+                            const returnUser = user.toJSON()
+                            delete returnUser.password
+                            return returnUser
                         } else {
                             throw {
                                 message: "Incorrect email or password",
@@ -63,13 +59,7 @@ export const authOptions = {
                                 exclude: ['password']
                             }
                         })
-                        return {
-                            id: createdUser.id,
-                            first_name: createdUser.first_name,
-                            last_name: createdUser.last_name,
-                            user_name: createdUser.user_name,
-                            email: createdUser.email,
-                        }
+                        return createdUser.toJSON()
                     }
 
                 } catch (err) {
@@ -79,31 +69,16 @@ export const authOptions = {
         }),
     ],
     callbacks: {
-        async jwt({ token, user, session }) {
-            if (user) {
-                return {
-                    ...token,
-                    id: user.id,
-                    first_name: user.first_name,
-                    last_name: user.last_name,
-                    user_name: user.user_name,
-                }
-            } else {
-                return token
+        async jwt({ token, user }) {
+            return {
+                ...token,
+                ...user
             }
         },
 
         async session({ session, token, user }) {
-            return {
-                ...session,
-                user: {
-                    ...session.user,
-                    id: token.id,
-                    first_name: token.first_name,
-                    last_name: token.last_name,
-                    user_name: token.user_name,
-                }
-            }
+            session.user = token
+            return session
         }
     },
     secret: process.env.JWT_SECRET,
