@@ -4,6 +4,10 @@ import { validateData } from "@/utils/defaults"
 import { emailSchema, passwordSchema } from "@/utils/schemas"
 import bcrypt from "bcrypt"
 import { models } from '@/db/models/index'
+import { generateTokens, refreshAccessToken } from '@/utils/functions'
+
+const ACCESS_TOKEN_EXPIRES = 1000
+const REFRESH_TOKEN_EXPIRES = 60 * 60 * 24 * 30 * 1000
 
 export const authOptions = {
     providers: [
@@ -37,7 +41,7 @@ export const authOptions = {
                         if (passwordVerified) {
                             const returnUser = user.toJSON()
                             delete returnUser.password
-                            return returnUser
+                            return generateTokens(returnUser)
                         } else {
                             throw {
                                 message: "Incorrect email or password",
@@ -59,7 +63,7 @@ export const authOptions = {
                                 exclude: ['password']
                             }
                         })
-                        return createdUser.toJSON()
+                        return generateTokens(createdUser.toJSON())
                     }
 
                 } catch (err) {
@@ -68,16 +72,37 @@ export const authOptions = {
             },
         }),
     ],
+    pages: {
+        signIn: `${process.env.HOME_URL}/account`,
+    },
     callbacks: {
-        async jwt({ token, user }) {
-            return {
-                ...token,
-                ...user
+        async jwt({ token, user, account, session }) {
+            if (account && user) {
+                const { accessToken, refreshToken, expiresIn } = user
+                return {
+                    ...token,
+                    ...user,
+                    accessToken: accessToken,
+                    refreshToken: refreshToken,
+                    expiresIn: expiresIn
+                }
             }
+
+            // if (token.expiresIn > Date.now()) {
+            //     return token
+            // }
+            // console.log("old token", token.accessToken)
+            // const refreshResponse = await refreshAccessToken(token)
+            // console.log("new token", refreshResponse.accessToken)
+            // return refreshResponse
+            return token
         },
 
         async session({ session, token, user }) {
-            session.user = token
+            session.user = token.user
+            session.accessToken = token.accessToken
+            session.refreshToken = token.refreshToken
+            session.expiresIn = token.expiresIn
             return session
         }
     },
@@ -86,7 +111,7 @@ export const authOptions = {
         jwt: true,
         maxAge: 30 * 24 * 60 * 60
     },
-    debug: process.env.NODE_ENV === 'development',
+    // debug: process.env.NODE_ENV === 'development',
 }
 
 const handler = NextAuth(authOptions)

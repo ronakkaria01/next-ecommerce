@@ -1,6 +1,6 @@
 import './globals.scss'
 import { getServerSession } from 'next-auth'
-import Provider from '@/context/SessionProvider'
+import { Provider } from '@/context/SessionProvider'
 import { authOptions } from './api/auth/[...nextauth]/route'
 import { CurrencyProvider } from '@/context/CurrencyContext'
 

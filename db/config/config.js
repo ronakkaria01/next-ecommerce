@@ -24,7 +24,8 @@ export const development = {
         acquire: 30000,
         idle: 10000,
     },
-    define
+    define,
+    logging: false
 };
 
 export const production = {
@@ -35,5 +36,6 @@ export const production = {
     port: DB_PORT,
     dialect,
     pool,
-    define
+    define,
+    logging: false
 };

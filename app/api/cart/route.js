@@ -1,5 +1,6 @@
-import { products } from "@/app/shop/page";
 import { defaultResponse as response, sendResponse } from "@/utils/defaults";
+import { models } from "@/db/models";
+import { cleanPost } from "@/utils/functions";
 
 export async function POST(req, res) {
 
@@ -16,7 +17,19 @@ export async function POST(req, res) {
             return cartResponse(response, cart)
         }
 
-        const product = products.find((p) => p.product_id === product_id);
+        let product = await models.posts.findOne({
+            where: {
+                post_type: 'product',
+                id: product_id
+            },
+            include: [
+                {
+                    model: models.post_meta,
+                    attributes: ['meta_key', 'meta_value'],
+                }
+            ]
+        })
+        product = cleanPost(product)
 
         if (!product) {
             response.status = 404
@@ -57,7 +70,7 @@ export async function DELETE(req, res) {
         if (req.cookies.has('cart')) {
             cart = JSON.parse(req.cookies.get('cart').value)
         }
-        
+
         const { product_id, user_id } = await req.json();
         if (!product_id) {
             response.status = 400
@@ -66,7 +79,19 @@ export async function DELETE(req, res) {
             return cartResponse(response, cart)
         }
 
-        const product = products.find((p) => p.product_id === product_id);
+        let product = await models.posts.findOne({
+            where: {
+                post_type: 'product',
+                id: product_id
+            },
+            include: [
+                {
+                    model: models.post_meta,
+                    attributes: ['meta_key', 'meta_value'],
+                }
+            ]
+        })
+        product = cleanPost(product)
         if (!product) {
             response.status = 404
             response.message = "Product not found"

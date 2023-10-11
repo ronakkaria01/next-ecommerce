@@ -17,16 +17,13 @@ export default function LoginSignup() {
             const formData = new FormData(e.target)
             const email = formData.get('email')
             const password = formData.get('password')
-            const result = await signIn('credentials', { email, password, redirect: false })
+            const result = await signIn('credentials', { email, password, redirect: true, callbackUrl: "/" })
             if (result.error) {
                 const { validationErrors, message } = JSON.parse(result.error)
                 setLoginMessages({
                     message: message,
                     validationErrors: validationErrors
                 })
-            } else {
-                router.refresh()
-                router.push('/')
             }
         } catch (err) {
             setLoginMessages({
