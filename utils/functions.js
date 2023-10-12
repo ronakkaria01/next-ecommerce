@@ -8,9 +8,13 @@ function convertToSlug(title) {
 function cleanPosts(data) {
     let cleaned = []
     data.forEach(item => {
-        cleaned.push(extract_meta_data(item, 'post_meta'))
+        cleaned.push(cleanPost(item))
     });
     return cleaned
+}
+
+function cleanPost(post) {
+    return extract_meta_data(post, 'post_meta')
 }
 
 function extract_meta_data(data, meta_data_key) {
@@ -26,5 +30,6 @@ function extract_meta_data(data, meta_data_key) {
 export {
     convertToSlug,
     extract_meta_data,
-    cleanPosts
+    cleanPosts,
+    cleanPost
 }
