@@ -1,28 +1,22 @@
-import RemoveFromCart from "@/components/button/RemoveFromCart";
+import CartTable from "@/components/cart/CartTable";
 import Header from "@/components/header/header";
-import { cookies } from "next/headers"
+import { OrderSummary } from "@/components/order-summary/OrderSummary";
 
 export const revalidate = 'force-cache'
 
 export default async function Cart() {
-    const store = cookies()
-    let cart = []
-    if (store.has('cart')) {
-        cart = JSON.parse(store.get('cart').value)
-    }
     return (
         <>
             <Header />
-            <div className="cart">
-                {cart.map((item, index) => (
-                    item && (
-                        <div key={index} >
-                            <p>ID: {item.product_id}</p>
-                            <p>Quantity: {item.quantity}</p>
-                            <RemoveFromCart product_id={item.product_id} />
-                        </div>
-                    )
-                ))}
+            <div className="py-16 container">
+                <div className="flex -ml-3">
+                    <div className="w-2/3 px-3">
+                        <CartTable />
+                    </div>
+                    <div className="w-1/3 px-3">
+                        <OrderSummary />
+                    </div>
+                </div>
             </div >
         </>
     )

@@ -20,14 +20,15 @@ const RemoveFromCart = ({ product_id }) => {
                 })
             });
             router.refresh()
-            console.log(await del.json())
         } catch (err) {
             console.log(err)
         }
     };
 
     return (
-        <Button onClick={handleRemoveFromCart} label={"Remove From Cart"} />
+        <button className="text-2xl" onClick={handleRemoveFromCart}>
+            &times;
+        </button>
     );
 };
 
