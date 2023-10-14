@@ -3,6 +3,7 @@ import Header from "@/components/header/header";
 import { getPostsByIDs } from "@/db/controller/posts.controller";
 import { cookies } from "next/headers"
 import Image from "next/image";
+import CurrencyDisplay from "../helpers/CurrencyDisplay";
 
 export const revalidate = 'force-cache'
 
@@ -43,20 +44,22 @@ export default async function CartTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((product) => {
+                    {products.map((product, index) => {
                         const quantity = cart.find(item => item.product_id === product.id).quantity
+                        let rowClasses = index > 0 ? 'border-t-2' : ''
+                        rowClasses += " border-slate-300"
                         return (
-                            <tr key={product.id}>
+                            <tr key={product.id} className={rowClasses}>
                                 <td className="text-center py-4">
                                     <RemoveFromCart product_id={product.id} />
                                 </td>
                                 <td className="w-[100px] py-4">
-                                    <Image className="block mx-auto" alt={product.post_title} src={product.thumbnail} width={100} height={100} />
+                                    <Image className="block mx-auto" alt={product.post_title} src={product.thumbnail} width={100} height={0} />
                                 </td>
                                 <TData title={product.post_title} />
-                                <TData title={product.discount_price} />
+                                <TData title={<CurrencyDisplay price={product.discount_price} />} />
                                 <TData title={quantity} />
-                                <TData title={quantity * product.discount_price} />
+                                <TData title={<CurrencyDisplay price={quantity * product.discount_price} />} />
                             </tr>
                         )
                     })}
