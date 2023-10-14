@@ -1,7 +1,5 @@
 import RemoveFromCart from "@/components/button/RemoveFromCart";
-import Header from "@/components/header/header";
 import { getPostsByIDs } from "@/db/controller/posts.controller";
-import { cookies } from "next/headers"
 import Image from "next/image";
 import CurrencyDisplay from "../helpers/CurrencyDisplay";
 
@@ -19,17 +17,9 @@ const TData = ({ title }) => {
     )
 }
 
-export default async function CartTable() {
-    const store = cookies()
-    let cart = []
-    let ids = []
-    if (store.has('cart')) {
-        cart = JSON.parse(store.get('cart').value)
-    }
-    cart.forEach(item => {
-        ids.push(item.product_id)
-    })
-    const products = await getPostsByIDs(ids)
+export default async function CartTable({ cart }) {
+    if (cart.items.length == 0) return
+    const items = cart.items
     return (
         <>
             <table className="w-full">
@@ -44,22 +34,21 @@ export default async function CartTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((product, index) => {
-                        const quantity = cart.find(item => item.product_id === product.id).quantity
+                    {items.map((item, index) => {
                         let rowClasses = index > 0 ? 'border-t-2' : ''
                         rowClasses += " border-slate-300"
                         return (
-                            <tr key={product.id} className={rowClasses}>
+                            <tr key={item.id} className={rowClasses}>
                                 <td className="text-center py-4">
-                                    <RemoveFromCart product_id={product.id} />
+                                    <RemoveFromCart product_id={item.id} />
                                 </td>
                                 <td className="w-[100px] py-4">
-                                    <Image className="block mx-auto" alt={product.post_title} src={product.thumbnail} width={100} height={0} />
+                                    <Image className="block mx-auto" alt={item.post_title} src={item.thumbnail} width={100} height={0} style={{ width: "auto", height: "auto" }} />
                                 </td>
-                                <TData title={product.post_title} />
-                                <TData title={<CurrencyDisplay price={product.discount_price} />} />
-                                <TData title={quantity} />
-                                <TData title={<CurrencyDisplay price={quantity * product.discount_price} />} />
+                                <TData title={item.post_title} />
+                                <TData title={<CurrencyDisplay price={item.price} />} />
+                                <TData title={item.quantity} />
+                                <TData title={<CurrencyDisplay price={item.subtotal} />} />
                             </tr>
                         )
                     })}

@@ -1,8 +1,11 @@
 "use client"
 import { useState } from 'react';
 
-const Button = ({ onClick, label }) => {
+const Button = ({ onClick, label, className }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const baseClasses = "bg-blue-500 text-white font-bold py-2 px-4 rounded";
+    const dynamicClasses = isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
+    const mergedClasses = `${baseClasses} ${dynamicClasses} ${className || ''}`;
     const handleClick = async () => {
         setIsLoading(true);
         try {
@@ -14,7 +17,7 @@ const Button = ({ onClick, label }) => {
 
     return (
         <button
-            className={`bg-blue-500 text-white font-bold py-2 px-4 rounded ${isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            className={`${mergedClasses}`}
             onClick={onClick ? handleClick : null}
             disabled={isLoading}
         >
