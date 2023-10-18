@@ -29,7 +29,7 @@ const importModels = async () => {
 
   for (const file of files) {
     try {
-      const modelModule = await import(`@/db/models/${file.slice(0, -3)}`);
+      const modelModule = require(`@/db/models/${file.slice(0, -3)}`);
       const modelDefiner = modelModule.default || modelModule;
       const model = modelDefiner(sequelize, DataTypes);
       models[model.name] = model;

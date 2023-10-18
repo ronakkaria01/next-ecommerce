@@ -12,7 +12,7 @@ export default async function Cart() {
         <>
             <Header />
             <div className="py-16 container">
-                {cart.length == 0 ? (
+                {cart.items.length == 0 ? (
                     <EmptyCart />
                 ) : (
                     <div className="flex -ml-3">
