@@ -9,7 +9,7 @@ export default function LoginSignup() {
     const router = useRouter()
     const [loginMessages, setLoginMessages] = useState({})
     const params = useSearchParams()
-    const cbUrl = params.get("callbackUrl")
+    const cbUrl = params.get("callbackUrl") || "/"
 
     const login = async (e) => {
         e.preventDefault()

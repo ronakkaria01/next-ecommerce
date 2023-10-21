@@ -20,6 +20,18 @@ export function cleanPost(post) {
     return extract_meta_data(post, 'post_meta')
 }
 
+export function cleanUsers(data) {
+    let cleaned = []
+    data.forEach(item => {
+        cleaned.push(cleanUser(item))
+    });
+    return cleaned
+}
+
+export function cleanUser(user) {
+    return extract_meta_data(user, 'user_meta')
+}
+
 export function extract_meta_data(data, meta_data_key) {
     data = data.toJSON()
     const meta = data[meta_data_key]
@@ -40,7 +52,7 @@ export function getFlatDeliveryRate() {
 }
 
 export function checkIsFlatDelivery() {
-    return false
+    return true
 }
 
 export function getCart() {
@@ -63,10 +75,10 @@ export async function generateCartSummary() {
     })
     const products = await getPostsByIDs(ids)
     if (products.length == 0) return returnCart
-    let _subtotal = 0.00
-    let _total = 0.00
     let _totalTaxes = 0.00
     let _delivery = 0.00
+    let _subtotal = 0.00
+    let _total = 0.00
     const taxRate = getTaxRate()
     const flatDelivery = getFlatDeliveryRate()
     const isFlatDelivery = checkIsFlatDelivery()

@@ -1,12 +1,12 @@
 export default (sequelize, DataTypes) => {
-    const PostMeta = sequelize.define("post_meta", {
-        meta_id: {
+    const UserMeta = sequelize.define("user_meta", {
+        umeta_id: {
             type: DataTypes.BIGINT(20),
             autoIncrement: true,
             primaryKey: true,
             unsigned: true,
         },
-        post_id: {
+        user_id: {
             type: DataTypes.BIGINT(20),
             allowNull: false,
             unsigned: true,
@@ -23,9 +23,9 @@ export default (sequelize, DataTypes) => {
         timestamps: false
     })
 
-    PostMeta.associate = function (models) {
-        PostMeta.belongsTo(models.posts, { foreignKey: 'post_id', sourceKey: 'id', onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+    UserMeta.associate = function (models) {
+        UserMeta.belongsTo(models.users, { foreignKey: 'user_id', sourceKey: 'id', onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     }
 
-    return PostMeta
+    return UserMeta
 }

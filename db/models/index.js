@@ -48,7 +48,7 @@ const importModels = async () => {
 
 // Call the function to import models
 importModels().then(() => {
-  // sequelize.sync({ force: true }).then(() => {
+  // sequelize.sync({ alter: true }).then(() => {
   //   // console.log("Drop and re-sync db.");
   // }).catch((err) => {
   //   console.log(err)

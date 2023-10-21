@@ -11,7 +11,7 @@ export default async function Cart() {
     return (
         <>
             <Header />
-            <div className="py-16 container">
+            <main className="py-16 container">
                 {cart.items.length == 0 ? (
                     <EmptyCart />
                 ) : (
@@ -24,7 +24,7 @@ export default async function Cart() {
                         </div>
                     </div >
                 )}
-            </div >
+            </main >
         </>
     )
 }

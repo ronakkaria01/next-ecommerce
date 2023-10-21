@@ -31,5 +31,9 @@ export default (sequelize, DataTypes) => {
         timestamps: true
     })
 
+    Users.associate = function (models) {
+        Users.hasMany(models.user_meta, { foreignKey: "user_id", onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+    }
+
     return Users
 }
