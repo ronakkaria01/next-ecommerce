@@ -112,6 +112,6 @@ export async function generateCartSummary() {
     returnCart.total = _total.toFixed(2)
     returnCart.subtotal = _subtotal.toFixed(2)
     returnCart.taxes = _totalTaxes.toFixed(2)
-    returnCart.delivery = isFlatDelivery ? flatDelivery : _delivery
+    returnCart.delivery = (isFlatDelivery ? flatDelivery : _delivery).toFixed(2)
     return returnCart
 }

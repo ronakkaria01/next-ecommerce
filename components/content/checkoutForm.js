@@ -1,7 +1,8 @@
 "use client"
+import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 
-export default function CheckoutForm({ user }) {
+export default function CheckoutForm({ user, cart }) {
     const { id } = user
     const {
         register,
@@ -25,16 +26,24 @@ export default function CheckoutForm({ user }) {
                 phone: e.phone
             }
         }
-        const user = await fetch(`/api/user/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify(updateUser)
+        // const user = await fetch(`/api/user/${id}`, {
+        //     method: 'PATCH',
+        //     body: JSON.stringify(updateUser)
+        // })
+        // console.log(await user.json())
+        const order = await fetch(`/api/order/${id}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                address: { ...updateUser.meta_data },
+                cart: cart
+            })
         })
     }
 
     return (
         <>
-            <p>Checkout</p>
             <form onSubmit={handleSubmit(checkout)}>
+                <p>Billing Address</p>
                 <div className="flex gap-8">
                     <div className="w-1/2">
                         <input type="text" placeholder="First Name" defaultValue={user.first_name} {...register("first_name", { required: true })} />
@@ -73,7 +82,7 @@ export default function CheckoutForm({ user }) {
                     {errors.email && <span>This value is required</span>}
                 </div>
                 <div>
-                    <button>Continue to shipping</button>
+                    <button>Continue to payment</button>
                 </div>
             </form>
         </>

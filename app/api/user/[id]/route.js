@@ -57,7 +57,9 @@ export async function PATCH(req, { params }, res) {
             for (const meta_key in meta_data) {
                 const data = await getUserMeta(meta_key, id)
                 if (data) {
-                    await updateUserMeta(id, meta_key, meta_data[meta_key])
+                    if (data != meta_data[meta_key]) {
+                        await updateUserMeta(id, meta_key, meta_data[meta_key])
+                    }
                 } else {
                     await addUserMeta(id, meta_key, meta_data[meta_key])
                 }

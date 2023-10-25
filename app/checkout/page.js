@@ -26,7 +26,7 @@ export default async function Checkout() {
             <main className="py-16 container">
                 <div className="flex gap-8">
                     <div className="w-2/3">
-                        <CheckoutForm user={user} />
+                        <CheckoutForm user={user} cart={cart} />
                     </div>
                     <div className="w-1/3">
                         <CheckoutSummary cart={cart} />
