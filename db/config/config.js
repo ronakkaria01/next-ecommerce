@@ -18,6 +18,7 @@ export const development = {
     host: DB_HOST,
     port: DB_PORT,
     dialect,
+    dialectModule: require('mysql2'),
     pool: {
         max: 2,
         min: 0,
@@ -34,6 +35,7 @@ export const production = {
     host: DB_HOST,
     port: DB_PORT,
     dialect,
+    dialectModule: require('mysql2'),
     pool,
     define
 };
