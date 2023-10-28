@@ -50,5 +50,9 @@ export default (sequelize, DataTypes) => {
         Orders.hasMany(models.order_item, { foreignKey: "order_id", onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     }
 
+    Orders.associate = function (models) {
+        Orders.belongsTo(models.order_statuses, { foreignKey: "id" })
+    }
+
     return Orders
 }

@@ -1,5 +1,4 @@
 "use client"
-import { useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 
 export default function CheckoutForm({ user, cart }) {
@@ -31,13 +30,22 @@ export default function CheckoutForm({ user, cart }) {
         //     body: JSON.stringify(updateUser)
         // })
         // console.log(await user.json())
-        const order = await fetch(`/api/order/${id}`, {
-            method: 'POST',
-            body: JSON.stringify({
-                address: { ...updateUser.meta_data },
-                cart: cart
+        try {
+            const order = await fetch(`/api/order/${id}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    address: { ...updateUser.meta_data },
+                    cart: cart
+                })
             })
-        })
+            if (order) {
+                await fetch(`/api/cart/empty`)
+                window.history.replaceState({}, document.title, '/')
+                window.location.replace('/')
+            }
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     return (

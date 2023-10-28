@@ -11,13 +11,16 @@ import { getUser } from "@/db/controller/users.controller"
 export const revalidate = 'force-cache'
 
 export default async function Checkout() {
+    const cart = await generateCartSummary()
+    if (cart.items.length < 1) {
+        redirect('/cart')
+    }
     const session = await getServerSession(authOptions)
     const headerList = headers()
     const cbUrl = headerList.get('x-url')
     if (!session?.user) {
         redirect(`/account?callbackUrl=${encodeURIComponent(cbUrl)}`)
     }
-    const cart = await generateCartSummary()
     const id = session.user.id
     const user = await getUser(id)
     return (

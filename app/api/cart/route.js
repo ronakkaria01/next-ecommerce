@@ -1,15 +1,15 @@
-import { defaultResponse as response, sendResponse } from "@/utils/defaults";
-import { models } from "@/db/models";
-import { cleanPost } from "@/utils/functions";
+import { cartResponse, defaultResponse as response, sendResponse } from "@/utils/defaults"
+import { models } from "@/db/models"
+import { cleanPost } from "@/utils/functions"
 
 export async function POST(req, res) {
 
-    let cart = [];
+    let cart = []
     try {
         if (req.cookies.has('cart')) {
             cart = JSON.parse(req.cookies.get('cart').value)
         }
-        const { product_id, quantity, user_id } = await req.json();
+        const { product_id, quantity, user_id } = await req.json()
         if (!product_id || !quantity || isNaN(quantity) || quantity <= 0) {
             response.status = 400
             response.message = "Invalid request. Please provide a valid product_id and quantity."
@@ -65,13 +65,13 @@ export async function POST(req, res) {
 }
 
 export async function DELETE(req, res) {
-    let cart = [];
+    let cart = []
     try {
         if (req.cookies.has('cart')) {
             cart = JSON.parse(req.cookies.get('cart').value)
         }
 
-        const { product_id, user_id } = await req.json();
+        const { product_id, user_id } = await req.json()
         if (!product_id) {
             response.status = 400
             response.message = "Invalid request. Please provide a valid product_id."
@@ -119,14 +119,4 @@ export async function DELETE(req, res) {
         response.message = "Invalid request. Some error occured, please try again later."
         response.errors = "Invalid request. Some error occured, please try again later."
     }
-}
-
-function cartResponse(response, cart) {
-    const resp = sendResponse(response)
-    resp.cookies.set({
-        name: "cart",
-        value: JSON.stringify(cart),
-        httpOnly: false
-    })
-    return resp
 }

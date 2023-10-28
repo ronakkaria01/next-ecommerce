@@ -26,7 +26,7 @@ export async function addUserMeta(id, key, value) {
 }
 
 export async function getUser(id) {
-    let user = []
+    let user = false
     try {
         user = await models.users.findOne({
             where: { id: id },
@@ -38,6 +38,9 @@ export async function getUser(id) {
                 }
             ]
         })
+        if (!user) {
+            return false
+        }
         user = cleanUser(user)
     } catch (err) {
         console.log(err)
