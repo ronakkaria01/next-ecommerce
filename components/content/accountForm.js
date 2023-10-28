@@ -65,10 +65,10 @@ export default function LoginSignup() {
                         <p>Login</p>
                         <form onSubmit={login}>
                             <div>
-                                <input type="email" name="email" placeholder="Enter Email Address" required defaultValue={`ronak.karia012000@gmail.com`} />
+                                <input type="email" name="email" placeholder="Enter Email Address" required />
                             </div>
                             <div>
-                                <input type="password" name="password" placeholder="Enter Password" required defaultValue={`Rr@12345`} />
+                                <input type="password" name="password" placeholder="Enter Password" required />
                             </div>
                             <div>
                                 <button>Login</button>
