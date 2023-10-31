@@ -1,4 +1,4 @@
-import { cleanUser } from "@/utils/functions";
+import { cleanUser } from "@/lib/functions";
 import { models } from "../models";
 
 export async function getUserMeta(key, id) {

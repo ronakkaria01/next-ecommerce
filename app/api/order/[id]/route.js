@@ -1,6 +1,6 @@
 import { getUser } from "@/db/controller/users.controller";
 import { models } from "@/db/models";
-import { defaultResponse as response, sendResponse } from "@/utils/defaults";
+import { defaultResponse as response, sendResponse } from "@/lib/defaults";
 
 const statuses = ['Pending', 'Processing', 'In Transit/Shipped', 'Delivered', 'Cancelled', 'On Hold', 'Refunded', 'Backordered', 'Partially Shipped', 'Payment Pending', 'Awaiting Review/Feedback']
 

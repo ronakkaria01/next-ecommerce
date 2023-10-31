@@ -1,7 +1,7 @@
 "use client"
 
 import React, { createContext, useState } from 'react';
-import { currencies } from '../utils/currency';
+import { currencies } from '../lib/currency';
 
 const CurrencyContext = createContext();
 

@@ -1,4 +1,4 @@
-import { convertToSlug } from "@/utils/functions";
+import { convertToSlug } from "@/lib/functions";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { models } from "@/db/models/"

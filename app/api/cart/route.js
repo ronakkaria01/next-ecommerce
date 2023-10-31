@@ -1,6 +1,6 @@
-import { cartResponse, defaultResponse as response, sendResponse } from "@/utils/defaults"
+import { cartResponse, defaultResponse as response, sendResponse } from "@/lib/defaults"
 import { models } from "@/db/models"
-import { cleanPost } from "@/utils/functions"
+import { cleanPost } from "@/lib/functions"
 
 export async function POST(req, res) {
 
@@ -118,5 +118,65 @@ export async function DELETE(req, res) {
         response.status = 500
         response.message = "Invalid request. Some error occured, please try again later."
         response.errors = "Invalid request. Some error occured, please try again later."
+    }
+}
+
+export async function PATCH(req, res) {
+    let cart = []
+    try {
+        if (req.cookies.has('cart')) {
+            cart = JSON.parse(req.cookies.get('cart').value)
+        }
+
+        const { product_id, user_id, quantity } = await req.json()
+        if (!product_id) {
+            response.status = 400
+            response.message = "Invalid request. Please provide a valid product_id."
+            response.errors = "Invalid request. Please provide a valid product_id."
+            return cartResponse(response, cart)
+        }
+
+        if (quantity === 0) {
+            response.status = 400
+            response.message = "Invalid request. Please provide a valid quantity."
+            response.errors = "Invalid request. Please provide a valid quantity."
+            return cartResponse(response, cart)
+        }
+
+        let product = await models.posts.findOne({
+            where: {
+                post_type: 'product',
+                id: product_id
+            },
+            include: [
+                {
+                    model: models.post_meta,
+                    attributes: ['meta_key', 'meta_value'],
+                }
+            ]
+        })
+        product = cleanPost(product)
+        if (!product) {
+            response.status = 404
+            response.message = "Product not found"
+            response.errors = "Product not found"
+            return cartResponse(response, cart)
+        }
+
+        const cartHasProduct = cart.some(item => item.product_id === product_id)
+        if (cartHasProduct) {
+            const index = cart.findIndex(obj => obj.product_id === product_id)
+            console.log(index)
+            if (index !== -1) {
+                cart[index].quantity = quantity
+            }
+            response.message = "Product quantity updated successfully"
+            response.data = {
+                cart: cart
+            }
+            return cartResponse(response, cart)
+        }
+    } catch (err) {
+        console.log(err)
     }
 }

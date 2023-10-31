@@ -1,4 +1,4 @@
-import { defaultResponse as response, cartResponse } from "@/utils/defaults"
+import { defaultResponse as response, cartResponse } from "@/lib/defaults"
 
 export async function GET(req, res) {
     cartResponse.status = 200

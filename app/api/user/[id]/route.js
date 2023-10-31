@@ -1,6 +1,6 @@
 import { addUserMeta, getUserMeta, updateUserMeta } from "@/db/controller/users.controller";
 import { models } from "@/db/models"
-import { defaultResponse as response, sendResponse } from "@/utils/defaults";
+import { defaultResponse as response, sendResponse } from "@/lib/defaults";
 
 export async function GET(req, { params }, res) {
     const { id } = params

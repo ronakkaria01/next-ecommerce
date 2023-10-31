@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { validateData } from "@/utils/defaults"
-import { emailSchema, passwordSchema } from "@/utils/schemas"
+import { validateData } from "@/lib/defaults"
+import { emailSchema, passwordSchema } from "@/lib/schemas"
 import bcrypt from "bcrypt"
 import { models } from '@/db/models/index'
 

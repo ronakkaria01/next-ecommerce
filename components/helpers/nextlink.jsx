@@ -12,13 +12,7 @@ import NProgress from "nprogress";
  * @param {string} [props.activeClassName] - Optional CSS class for active element.
  * @param {string} props.text - The text to display for the link.
  */
-export default function NavLink(props) {
-    const {
-        href = "/",
-        activeClassName = undefined,
-        className = undefined,
-        text = "Link",
-    } = props;
+export default function NavLink({ href = '/', activeClassName = undefined, className = undefined, text = 'Link', ...props }) {
     const pathname = usePathname()
     const isActive = pathname === href;
 
@@ -34,6 +28,6 @@ export default function NavLink(props) {
     }
 
     return (
-        <Link href={href} onClick={showLoading} className={mergedClassName}>{text}</Link>
+        <Link href={href} onClick={showLoading} className={mergedClassName} {...props}>{text}</Link>
     )
 }

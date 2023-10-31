@@ -1,4 +1,4 @@
-import { cleanPosts } from "@/utils/functions"
+import { cleanPosts } from "@/lib/functions"
 import { models } from "@/db/models/index"
 import { Op } from "sequelize"
 

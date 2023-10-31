@@ -1,5 +1,5 @@
 import Header from "@/components/header/header"
-import { generateCartSummary } from "@/utils/functions"
+import { generateCartSummary } from "@/lib/functions"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../api/auth/[...nextauth]/route"
 import { headers } from "next/headers"

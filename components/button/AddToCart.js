@@ -1,7 +1,7 @@
 "use client"
-import Button from './Button';
+import Button from './Button'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 
 const AddToCart = ({ product_id }) => {
 
@@ -18,7 +18,7 @@ const AddToCart = ({ product_id }) => {
                     product_id,
                     quantity: 1
                 })
-            });
+            })
             router.refresh()
         } catch (err) {
             console.log(err)
