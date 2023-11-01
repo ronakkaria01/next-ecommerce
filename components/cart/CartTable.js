@@ -67,11 +67,6 @@ function CartItem({ item, index }) {
                 product_id: item.id,
             })
         })
-        removeList()
-    }
-
-    const removeList = async () => {
-        listRef.current.remove()
         router.refresh()
     }
 
