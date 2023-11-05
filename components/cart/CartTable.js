@@ -48,7 +48,7 @@ function CartItem({ item, index }) {
     }
 
     const updateCart = async (e) => {
-        await fetch(`/api/cart`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
             method: 'PATCH',
             body: JSON.stringify({
                 user_id,
@@ -60,7 +60,7 @@ function CartItem({ item, index }) {
     }
 
     const removeFromCart = async () => {
-        await fetch(`/api/cart`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
             method: 'DELETE',
             body: JSON.stringify({
                 user_id,

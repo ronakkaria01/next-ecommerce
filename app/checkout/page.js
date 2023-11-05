@@ -8,7 +8,7 @@ import CheckoutForm from "@/components/content/checkoutForm"
 import { CheckoutSummary } from "@/components/checkout-summary/CheckoutSummary"
 import { getUser } from "@/db/controller/users.controller"
 
-export const revalidate = 'force-cache'
+export const revalidate = false
 
 export default async function Checkout() {
     const cart = await generateCartSummary()
@@ -22,7 +22,9 @@ export default async function Checkout() {
         redirect(`/account?callbackUrl=${encodeURIComponent(cbUrl)}`)
     }
     const id = session.user.id
-    const user = await getUser(id)
+    const user = await getUser(id, {
+        meta_fields: ['address']
+    })
     return (
         <>
             <Header />

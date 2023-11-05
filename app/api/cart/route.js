@@ -166,7 +166,6 @@ export async function PATCH(req, res) {
         const cartHasProduct = cart.some(item => item.product_id === product_id)
         if (cartHasProduct) {
             const index = cart.findIndex(obj => obj.product_id === product_id)
-            console.log(index)
             if (index !== -1) {
                 cart[index].quantity = quantity
             }

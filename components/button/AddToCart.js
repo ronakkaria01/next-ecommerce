@@ -11,7 +11,7 @@ const AddToCart = ({ product_id }) => {
 
     const handleAddToCart = async () => {
         try {
-            const added = await fetch("/api/cart", {
+            const added = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
                 method: "POST",
                 body: JSON.stringify({
                     user_id,

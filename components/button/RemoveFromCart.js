@@ -11,7 +11,7 @@ const RemoveFromCart = ({ product_id }) => {
 
     const handleRemoveFromCart = async () => {
         try {
-            const del = await fetch("/api/cart", {
+            const del = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`, {
                 method: "DELETE",
                 body: JSON.stringify({
                     user_id,

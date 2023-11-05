@@ -25,13 +25,8 @@ export default function CheckoutForm({ user, cart }) {
                 phone: e.phone
             }
         }
-        // const user = await fetch(`/api/user/${id}`, {
-        //     method: 'PATCH',
-        //     body: JSON.stringify(updateUser)
-        // })
-        // console.log(await user.json())
         try {
-            const order = await fetch(`/api/order/${id}`, {
+            const order = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order/${id}`, {
                 method: 'POST',
                 body: JSON.stringify({
                     address: { ...updateUser.meta_data },
@@ -39,7 +34,7 @@ export default function CheckoutForm({ user, cart }) {
                 })
             })
             if (order) {
-                await fetch(`/api/cart/empty`)
+                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/empty`)
                 window.history.replaceState({}, document.title, '/')
                 window.location.replace('/')
             }

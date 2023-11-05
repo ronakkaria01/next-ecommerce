@@ -1,20 +1,8 @@
-import LogoutButton from "../button/Logout";
 import NextLink from "../helpers/nextlink";
 import ProgressBar from "../helpers/ProgressBar";
-import { authOptions } from '../../app/api/auth/[...nextauth]/route'
-import { getServerSession } from 'next-auth'
 import NavBar from "./navbar";
 
 export default async function Header() {
-    const session = await getServerSession(authOptions)
-
-    const navLinks = [
-        ['Home', '/'],
-        ['Shop', '/shop'],
-        ['Cart', '/cart'],
-        ['Account', '/account']
-    ];
-
     return (
         <>
             <ProgressBar />

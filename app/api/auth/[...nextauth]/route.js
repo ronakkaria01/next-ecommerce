@@ -59,6 +59,10 @@ export const authOptions = {
                                 exclude: ['password']
                             }
                         })
+                        const capabilities = {
+                            role: 'user'
+                        }
+                        await addUserMeta(insertId, 'capabilities', JSON.stringify(capabilities))
                         return createdUser.toJSON()
                     }
 
